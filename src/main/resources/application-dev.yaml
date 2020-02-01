@@ -44,6 +44,13 @@ spring:
       max-request-size: 10240MB
   cache:
     type: none
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 10
+        max-active: 20
 management:
   endpoints:
     web:
@@ -64,3 +71,4 @@ halo:
   production-env: false
   auth-enabled: true
   workDir: ${user.home}/halo-dev/
+  cluster-mode: true

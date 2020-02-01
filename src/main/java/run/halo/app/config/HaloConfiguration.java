@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -13,7 +14,10 @@ import org.springframework.core.Ordered;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.client.RestTemplate;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 import run.halo.app.cache.InMemoryCacheStore;
+import run.halo.app.cache.RedisCacheStore;
 import run.halo.app.cache.StringCacheStore;
 import run.halo.app.config.properties.HaloProperties;
 import run.halo.app.filter.CorsFilter;
@@ -38,12 +42,14 @@ import java.security.NoSuchAlgorithmException;
  * @author johnniang
  */
 @Configuration
-@EnableConfigurationProperties(HaloProperties.class)
+@EnableConfigurationProperties({HaloProperties.class, RedisProperties.class})
 @Slf4j
 public class HaloConfiguration {
 
     @Autowired
     HaloProperties haloProperties;
+    @Autowired
+    RedisProperties redisProperties;
 
     @Bean
     public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
@@ -63,7 +69,14 @@ public class HaloConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public StringCacheStore stringCacheStore() {
-        return new InMemoryCacheStore();
+        if (!haloProperties.isClusterMode()) {
+            return new InMemoryCacheStore();
+        } else {
+            JedisPoolConfig poolConfig = new JedisPoolConfig();
+            poolConfig.setMaxTotal(redisProperties.getJedis().getPool().getMaxActive());
+            poolConfig.setMinIdle(redisProperties.getJedis().getPool().getMinIdle());
+            return new RedisCacheStore(new JedisPool(poolConfig, redisProperties.getHost(), redisProperties.getPort()));
+        }
     }
 
     /**

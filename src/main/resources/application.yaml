@@ -44,6 +44,13 @@ spring:
     multipart:
       max-file-size: 10240MB
       max-request-size: 10240MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 10
+        max-active: 20
 management:
   endpoints:
     web:
@@ -58,3 +65,4 @@ logging:
 
 halo:
   download-timeout: 5m
+  cluster-mode: true

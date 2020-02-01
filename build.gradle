@@ -59,6 +59,7 @@ ext {
     image4jVersion = '0.7zensight1'
     flywayVersion = '6.1.0'
     h2Version = '1.4.196'
+    jedisVersion = '3.2.0'
 }
 
 dependencies {
@@ -83,6 +84,7 @@ dependencies {
     implementation "org.apache.httpcomponents:httpclient:$httpclientVersion"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$dataformatYamlVersion"
     implementation "org.eclipse.jgit:org.eclipse.jgit:$jgitVersion"
+    implementation "redis.clients:jedis:$jedisVersion"
 
     implementation "com.vladsch.flexmark:flexmark:$flexmarkVersion"
     implementation "com.vladsch.flexmark:flexmark-ext-attributes:$flexmarkVersion"
