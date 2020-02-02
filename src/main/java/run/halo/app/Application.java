@@ -11,6 +11,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import run.halo.app.repository.base.BaseRepositoryImpl;
+import run.halo.app.utils.HaloUtils;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Halo main class.
@@ -30,7 +34,7 @@ public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         // Customize the spring config location
         System.setProperty("spring.config.additional-location", "file:${user.home}/.halo/,file:${user.home}/halo-dev/");
-
+        System.setProperty("hostname", HaloUtils.getMachineHostname());
         // Run application
         context = SpringApplication.run(Application.class, args);
     }

@@ -65,7 +65,7 @@ logging:
     org.hibernate.type.descriptor.sql.BasicExtractor: INFO
   file:
     path: ${user.home}/halo-dev/logs
-
+  config: ${user.home}/halo-dev/logback-spring.xml
 halo:
   doc-disabled: false
   production-env: false

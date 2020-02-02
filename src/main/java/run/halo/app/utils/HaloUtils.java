@@ -264,6 +264,21 @@ public class HaloUtils {
     }
 
     /**
+     * Gets machine hostname.
+     *
+     * @return current machine hostname.
+     */
+    public static String getMachineHostname() {
+        InetAddress machineAddress;
+        try {
+            machineAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            machineAddress = InetAddress.getLoopbackAddress();
+        }
+        return machineAddress.getHostName();
+    }
+
+    /**
      * Clean all html tag
      *
      * @param content html document
